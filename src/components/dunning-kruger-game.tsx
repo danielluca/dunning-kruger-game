@@ -613,7 +613,7 @@ export default function DunningKrugerGame() {
                   fontSize: "12px", fontWeight: "700", letterSpacing: "1.5px",
                   textTransform: "uppercase",
                   color: q.difficulty === "leicht" ? "#10b981" : q.difficulty === "mittel" ? "#f59e0b" : "#ef4444",
-                  background: q.difficulty === "leicht" ? "#10b98122" : q.difficulty === "mittel" ? "#f59e0b22" : "#ef444422", 
+                  background: q.difficulty === "leicht" ? "#10b98122" : q.difficulty === "mittel" ? "#f59e0b22" : "#ef444422",
                   padding: "4px 12px", borderRadius: "20px",
                 }}>
                   {q.difficulty}
@@ -630,18 +630,18 @@ export default function DunningKrugerGame() {
                 let border = "1px solid var(--border)";
                 let color = "var(--text)";
                 let fontWeight = "500";
-                
+
                 if (answered) {
-                  if (idx === q.correct) { 
+                  if (idx === q.correct) {
                     bg = "#10b98122"; border = "2px solid #10b981"; color = "#059669"; fontWeight = "700";
                   }
-                  else if (idx === selectedAnswer && idx !== q.correct) { 
+                  else if (idx === selectedAnswer && idx !== q.correct) {
                     bg = "#ef444422"; border = "2px solid #ef4444"; color = "#dc2626"; fontWeight = "700";
                   }
                 } else if (idx === selectedAnswer) {
                   bg = "var(--accent-bg)"; border = "2px solid var(--accent)"; color = "var(--accent)"; fontWeight = "700";
                 }
-                
+
                 return (
                   <button key={idx} onClick={() => handleAnswer(idx)} style={{
                     background: bg, border, borderRadius: "16px", padding: "18px 24px",
@@ -671,7 +671,7 @@ export default function DunningKrugerGame() {
                     <button key={c.value} onClick={() => setSelectedConfidence(c.value)} style={{
                       background: selectedConfidence === c.value ? "var(--accent)" : "var(--bg)",
                       border: selectedConfidence === c.value ? "1px solid var(--accent)" : "1px solid var(--border)",
-                      borderRadius: "12px", padding: "10px 18px", 
+                      borderRadius: "12px", padding: "10px 18px",
                       color: selectedConfidence === c.value ? "#fff" : "var(--text)",
                       fontSize: "14px", cursor: "pointer", transition: "all 0.2s", fontWeight: "600",
                       boxShadow: "0 1px 2px rgba(0,0,0,0.02)",
@@ -781,7 +781,7 @@ export default function DunningKrugerGame() {
                   const isActive = p.name === currentPhase.name;
                   return (
                     <div key={p.name} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
-                       <div style={{
+                      <div style={{
                         width: "100%",
                         height: isActive ? "24px" : "8px",
                         borderRadius: "10px",
@@ -816,8 +816,8 @@ export default function DunningKrugerGame() {
                       background: a.correct ? "#10b98108" : "#ef444408",
                       border: `1px solid ${a.correct ? "#10b98122" : "#ef444422"}`,
                     }}>
-                      <div style={{ 
-                        width: "28px", height: "28px", borderRadius: "50%", 
+                      <div style={{
+                        width: "28px", height: "28px", borderRadius: "50%",
                         background: a.correct ? "#10b981" : "#ef4444",
                         display: "flex", alignItems: "center", justifyContent: "center",
                         color: "#fff", fontSize: "14px", fontWeight: "800"
