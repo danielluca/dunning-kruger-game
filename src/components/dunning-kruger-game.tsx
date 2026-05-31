@@ -231,6 +231,110 @@ const QUESTION_SETS: Record<string, QuestionSet> = {
       },
     ],
   },
+  marketing: {
+    id: "marketing",
+    label: "Marketing & Growth",
+    emoji: "🚀",
+    description: "Performance, Branding & Strategie",
+    questions: [
+      {
+        id: 1,
+        question: "Was ist der Hauptunterschied zwischen ROI (Return on Investment) und ROAS (Return on Ad Spend)?",
+        options: [
+          "Es gibt keinen Unterschied, beide Begriffe sind synonym",
+          "ROAS betrachtet nur den Umsatz im Verhältnis zu den Werbekosten, ROI berücksichtigt die Gesamtkosten",
+          "ROI bezieht sich nur auf Offline-Marketing, ROAS nur auf Online-Marketing",
+          "ROAS wird in Prozent angegeben, ROI als absoluter Währungsbetrag",
+        ],
+        correct: 1,
+        difficulty: "mittel",
+      },
+      {
+        id: 2,
+        question: "Was versteht man im SEO unter dem 'Crawler' (oder Spider)?",
+        options: [
+          "Ein Programm, das Webseiten automatisch nach Sicherheitslücken durchsucht",
+          "Ein Tool zur Analyse von Ladezeiten",
+          "Ein Bot einer Suchmaschine, der das Web durchsucht und Seiten für den Index erfasst",
+          "Eine Software, die künstliche Backlinks generiert",
+        ],
+        correct: 2,
+        difficulty: "leicht",
+      },
+      {
+        id: 3,
+        question: "Was beschreibt die 'Click-Through-Rate' (CTR)?",
+        options: [
+          "Das Verhältnis von Klicks auf eine Anzeige zu den gesamten Impressionen",
+          "Die Anzahl der Nutzer, die nach dem Klick auch etwas kaufen",
+          "Die Geschwindigkeit, mit der ein Nutzer durch eine Website navigiert",
+          "Die Kosten, die pro Klick auf eine Werbeanzeige anfallen",
+        ],
+        correct: 0,
+        difficulty: "leicht",
+      },
+      {
+        id: 4,
+        question: "Was ist das primäre Ziel von 'Content Marketing'?",
+        options: [
+          "Möglichst viele Werbebanner auf der eigenen Seite zu platzieren",
+          "Direkte Verkaufsgespräche per Telefon zu forcieren",
+          "Durch wertvolle, relevante Informationen eine Zielgruppe anzusprechen und langfristig zu binden",
+          "Das Kopieren von Inhalten der Konkurrenz zur Reichweitensteigerung",
+        ],
+        correct: 2,
+        difficulty: "leicht",
+      },
+      {
+        id: 5,
+        question: "Was bedeutet 'Attribution' im Online-Marketing?",
+        options: [
+          "Die Zuweisung von Conversions zu verschiedenen Touchpoints in der Customer Journey",
+          "Die Gestaltung von Werbemitteln für verschiedene Zielgruppen",
+          "Der Schutz von Markennamen vor Missbrauch durch Dritte",
+          "Die automatische Gebotsanpassung in Google Ads",
+        ],
+        correct: 0,
+        difficulty: "schwer",
+      },
+      {
+        id: 6,
+        question: "Was ist ein 'Lead' im Marketing-Kontext?",
+        options: [
+          "Der Marktführer in einer bestimmten Branche",
+          "Ein qualifizierter Kontakt von einem potenziellen Kunden (z.B. durch Newsletter-Anmeldung)",
+          "Der wichtigste Werbekanal eines Unternehmens",
+          "Ein Kunde, der bereits mehr als drei Käufe getätigt hat",
+        ],
+        correct: 1,
+        difficulty: "leicht",
+      },
+      {
+        id: 7,
+        question: "Wofür steht 'Lookalike Audience' bei Social Media Ads?",
+        options: [
+          "Nutzer, die genau wie das Marketing-Team aussehen",
+          "Eine Zielgruppe, die den bestehenden Kunden in ihren Merkmalen und Interessen ähnelt",
+          "Nutzer, die nur die Profile der Konkurrenz besuchen",
+          "Eine Testgruppe, die keine Werbung angezeigt bekommt",
+        ],
+        correct: 1,
+        difficulty: "mittel",
+      },
+      {
+        id: 8,
+        question: "Was ist der 'Customer Lifetime Value' (CLV)?",
+        options: [
+          "Der Betrag, den ein Kunde für seinen ersten Kauf ausgibt",
+          "Die Zeit, die ein Kunde durchschnittlich auf der Website verbringt",
+          "Der geschätzte Gesamtwert, den ein Kunde während der gesamten Beziehung zum Unternehmen generiert",
+          "Die Kosten, die anfallen, um einen neuen Kunden zu gewinnen",
+        ],
+        correct: 2,
+        difficulty: "mittel",
+      },
+    ],
+  },
 };
 
 const CONFIDENCE_LABELS = [
