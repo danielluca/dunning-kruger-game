@@ -1,6 +1,28 @@
-import { useState, type SetStateAction, type JSXElementConstructor, type Key, type ReactElement, type ReactNode, type ReactPortal } from "react";
+import { useState } from "react";
 
-const QUESTION_SETS = {
+type Question = {
+  id: number;
+  question: string;
+  options: string[];
+  correct: number;
+  difficulty: "leicht" | "mittel" | "schwer";
+};
+
+type QuestionSet = {
+  id: string;
+  label: string;
+  emoji: string;
+  description: string;
+  questions: Question[];
+};
+
+type Answer = {
+  correct: boolean;
+  confidence: number;
+  questionId: number;
+};
+
+const QUESTION_SETS: Record<string, QuestionSet> = {
   dev: {
     id: "dev",
     label: "Produktentwicklung & Tech",
@@ -236,18 +258,18 @@ function getPhase(accuracy: number, avgConfidence: number) {
 
 export default function DunningKrugerGame() {
   const [phase, setPhase] = useState("intro");
-  const [selectedSet, setSelectedSet] = useState(null);
+  const [selectedSet, setSelectedSet] = useState<string | null>(null);
   const [currentQ, setCurrentQ] = useState(0);
-  const [answers, setAnswers] = useState([]);
-  const [selectedAnswer, setSelectedAnswer] = useState(null);
-  const [selectedConfidence, setSelectedConfidence] = useState(null);
+  const [answers, setAnswers] = useState<Answer[]>([]);
+  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
+  const [selectedConfidence, setSelectedConfidence] = useState<number | null>(null);
   const [answered, setAnswered] = useState(false);
   const [playerName, setPlayerName] = useState("");
   const [nameInput, setNameInput] = useState("");
 
   const activeSet = selectedSet ? QUESTION_SETS[selectedSet] : null;
   const questions = activeSet?.questions ?? [];
-  const q = questions[currentQ];
+  const q: Question | undefined = questions[currentQ];
 
   function startGame() {
     if (!nameInput.trim() || !selectedSet) return;
@@ -255,13 +277,13 @@ export default function DunningKrugerGame() {
     setPhase("quiz");
   }
 
-  function handleAnswer(idx: SetStateAction<null>) {
+  function handleAnswer(idx: number) {
     if (answered) return;
     setSelectedAnswer(idx);
   }
 
   function confirmAnswer() {
-    if (selectedAnswer === null || selectedConfidence === null) return;
+    if (selectedAnswer === null || selectedConfidence === null || !q) return;
     const correct = selectedAnswer === q.correct;
     setAnswers([...answers, { correct, confidence: selectedConfidence, questionId: q.id }]);
     setAnswered(true);
@@ -484,7 +506,7 @@ export default function DunningKrugerGame() {
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "28px" }}>
-              {q.options.map((opt: string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<string | number | bigint | boolean | ReactPortal | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | null | undefined, idx: Key | null | undefined) => {
+              {q.options.map((opt: string, idx: number) => {
                 let bg = "rgba(255,255,255,0.04)";
                 let border = "1px solid rgba(255,255,255,0.08)";
                 let color = "#e8e8f0";

@@ -1,4 +1,3 @@
-// @ts-expect-error -- JS module has no type declarations yet
 import DunningKrugerGame from './components/dunning-kruger-game'
 import './App.css'
 
