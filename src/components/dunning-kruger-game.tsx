@@ -428,84 +428,90 @@ export default function DunningKrugerGame() {
   return (
     <div style={{
       minHeight: "100vh",
-      background: "linear-gradient(135deg, #0f0c29, #1a1a2e, #16213e)",
-      fontFamily: "'Georgia', serif",
-      color: "#e8e8f0",
+      background: "var(--bg)",
+      fontFamily: "var(--sans)",
+      color: "var(--text)",
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
+      transition: "background 0.3s, color 0.3s",
     }}>
       {/* Header */}
       <div style={{
         width: "100%",
-        borderBottom: "1px solid rgba(255,255,255,0.08)",
-        padding: "18px 32px",
+        borderBottom: "1px solid var(--border)",
+        padding: "16px 32px",
         display: "flex",
         alignItems: "center",
         gap: "12px",
         boxSizing: "border-box",
+        background: "var(--bg)",
+        position: "sticky",
+        top: 0,
+        zIndex: 50,
       }}>
         <span style={{ fontSize: "20px" }}>🧠</span>
-        <span style={{ fontSize: "13px", letterSpacing: "3px", textTransform: "uppercase", color: "rgba(255,255,255,0.4)", fontFamily: "monospace" }}>
+        <span style={{ fontSize: "14px", fontWeight: "600", letterSpacing: "1px", textTransform: "uppercase", color: "var(--text-h)", opacity: 0.8 }}>
           Dunning–Kruger Experiment
         </span>
         {phase === "quiz" && activeSet && (
           <>
-            <span style={{
-              marginLeft: "8px", fontSize: "11px", fontFamily: "monospace",
-              color: "rgba(255,255,255,0.25)", background: "rgba(255,255,255,0.05)",
-              padding: "3px 10px", borderRadius: "6px",
+            <div style={{
+              marginLeft: "12px", fontSize: "12px", fontWeight: "500",
+              color: "var(--accent)", background: "var(--accent-bg)",
+              padding: "4px 12px", borderRadius: "20px",
+              border: "1px solid var(--accent-border)",
             }}>
               {activeSet.emoji} {activeSet.label}
-            </span>
-            <span style={{ marginLeft: "auto", fontSize: "12px", color: "rgba(255,255,255,0.3)", fontFamily: "monospace" }}>
+            </div>
+            <span style={{ marginLeft: "auto", fontSize: "13px", color: "var(--text)", opacity: 0.5, fontWeight: "500" }}>
               {currentQ + 1} / {questions.length}
             </span>
           </>
         )}
       </div>
 
-      <div style={{ width: "100%", maxWidth: "720px", padding: "40px 24px", boxSizing: "border-box" }}>
+      <div style={{ width: "100%", maxWidth: "800px", padding: "60px 24px", boxSizing: "border-box" }}>
 
         {/* INTRO */}
         {phase === "intro" && (
           <div style={{ textAlign: "center" }}>
-            <div style={{ fontSize: "64px", marginBottom: "24px" }}>🏔️</div>
-            <h1 style={{ fontSize: "clamp(28px, 5vw, 42px)", fontWeight: "700", lineHeight: 1.2, marginBottom: "12px", background: "linear-gradient(90deg, #a78bfa, #60a5fa)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+            <div style={{ fontSize: "72px", marginBottom: "24px" }}>🏔️</div>
+            <h1 style={{ fontSize: "clamp(32px, 6vw, 48px)", fontWeight: "800", lineHeight: 1.1, marginBottom: "16px", color: "var(--text-h)", letterSpacing: "-1px" }}>
               Weißt du, was du weißt?
             </h1>
-            <p style={{ fontSize: "16px", color: "rgba(255,255,255,0.55)", maxWidth: "480px", margin: "0 auto 32px", lineHeight: 1.7 }}>
+            <p style={{ fontSize: "18px", color: "var(--text)", maxWidth: "540px", margin: "0 auto 48px", lineHeight: 1.6, opacity: 0.8 }}>
               Beantworte {questions.length || 8} Fragen und schätze dabei ein, wie sicher du dir bist.
               Am Ende siehst du, wo du auf der Dunning-Kruger-Kurve landest.
             </p>
 
             {/* Category selection */}
-            <div style={{ marginBottom: "28px" }}>
-              <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.35)", letterSpacing: "2px", textTransform: "uppercase", fontFamily: "monospace", marginBottom: "14px" }}>
+            <div style={{ marginBottom: "40px" }}>
+              <p style={{ fontSize: "13px", color: "var(--text)", opacity: 0.6, letterSpacing: "1.5px", textTransform: "uppercase", fontWeight: "700", marginBottom: "20px" }}>
                 Thema wählen
               </p>
-              <div style={{ display: "flex", gap: "12px", justifyContent: "center", flexWrap: "wrap" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: "16px", justifyContent: "center" }}>
                 {Object.values(QUESTION_SETS).map(set => (
                   <button key={set.id} onClick={() => setSelectedSet(set.id)} style={{
                     background: selectedSet === set.id
-                      ? "linear-gradient(135deg, rgba(124,58,237,0.35), rgba(37,99,235,0.25))"
-                      : "rgba(255,255,255,0.04)",
+                      ? "var(--accent-bg)"
+                      : "var(--bg)",
                     border: selectedSet === set.id
-                      ? "1px solid #7c3aed"
-                      : "1px solid rgba(255,255,255,0.1)",
-                    borderRadius: "14px",
-                    padding: "20px 28px",
+                      ? "2px solid var(--accent)"
+                      : "1px solid var(--border)",
+                    borderRadius: "16px",
+                    padding: "24px",
                     cursor: "pointer",
-                    transition: "all 0.2s",
+                    transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
                     textAlign: "center",
-                    minWidth: "180px",
-                    fontFamily: "inherit",
+                    boxShadow: selectedSet === set.id ? "0 4px 12px var(--accent-bg)" : "none",
+                    transform: selectedSet === set.id ? "translateY(-2px)" : "none",
                   }}>
-                    <div style={{ fontSize: "28px", marginBottom: "8px" }}>{set.emoji}</div>
-                    <div style={{ fontSize: "15px", fontWeight: "600", color: selectedSet === set.id ? "#fff" : "rgba(255,255,255,0.7)", marginBottom: "4px" }}>
+                    <div style={{ fontSize: "32px", marginBottom: "12px" }}>{set.emoji}</div>
+                    <div style={{ fontSize: "16px", fontWeight: "700", color: selectedSet === set.id ? "var(--accent)" : "var(--text-h)", marginBottom: "6px" }}>
                       {set.label}
                     </div>
-                    <div style={{ fontSize: "12px", color: "rgba(255,255,255,0.35)" }}>
+                    <div style={{ fontSize: "13px", color: "var(--text)", opacity: 0.7 }}>
                       {set.description}
                     </div>
                   </button>
@@ -515,58 +521,65 @@ export default function DunningKrugerGame() {
 
             {/* DK phases info */}
             <div style={{
-              background: "rgba(255,255,255,0.04)",
-              border: "1px solid rgba(255,255,255,0.1)",
-              borderRadius: "16px",
-              padding: "22px 28px",
-              marginBottom: "32px",
+              background: "var(--code-bg)",
+              border: "1px solid var(--border)",
+              borderRadius: "20px",
+              padding: "28px 32px",
+              marginBottom: "40px",
               textAlign: "left",
+              boxShadow: "0 2px 4px rgba(0,0,0,0.02)",
             }}>
-              <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.4)", letterSpacing: "2px", textTransform: "uppercase", marginBottom: "14px", fontFamily: "monospace" }}>
+              <p style={{ fontSize: "13px", color: "var(--text)", opacity: 0.6, letterSpacing: "1.5px", textTransform: "uppercase", fontWeight: "700", marginBottom: "18px" }}>
                 Die vier Phasen
               </p>
-              {DK_PHASES.map(p => (
-                <div key={p.name} style={{ display: "flex", gap: "12px", marginBottom: "10px", alignItems: "flex-start" }}>
-                  <div style={{ width: "10px", height: "10px", borderRadius: "50%", background: p.color, flexShrink: 0, marginTop: "5px" }} />
-                  <div>
-                    <span style={{ fontWeight: "600", fontSize: "14px" }}>{p.name}</span>
-                    <span style={{ color: "rgba(255,255,255,0.45)", fontSize: "13px" }}> — {p.desc}</span>
+              <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+                {DK_PHASES.map(p => (
+                  <div key={p.name} style={{ display: "flex", gap: "14px", alignItems: "flex-start" }}>
+                    <div style={{ width: "12px", height: "12px", borderRadius: "50%", background: p.color, flexShrink: 0, marginTop: "6px", boxShadow: `0 0 8px ${p.color}44` }} />
+                    <div>
+                      <span style={{ fontWeight: "700", fontSize: "15px", color: "var(--text-h)" }}>{p.name}</span>
+                      <span style={{ color: "var(--text)", fontSize: "14px", opacity: 0.8 }}> — {p.desc}</span>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: "12px", alignItems: "center" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "16px", alignItems: "center" }}>
               <input
                 value={nameInput}
                 onChange={e => setNameInput(e.target.value)}
                 onKeyDown={e => e.key === "Enter" && startGame()}
                 placeholder="Dein Name oder Kürzel …"
                 style={{
-                  background: "rgba(255,255,255,0.07)",
-                  border: "1px solid rgba(255,255,255,0.15)",
-                  borderRadius: "10px",
-                  padding: "14px 20px",
-                  color: "#fff",
+                  background: "var(--bg)",
+                  border: "2px solid var(--border)",
+                  borderRadius: "12px",
+                  padding: "16px 24px",
+                  color: "var(--text-h)",
                   fontSize: "16px",
-                  width: "300px",
+                  width: "100%",
+                  maxWidth: "340px",
                   outline: "none",
                   textAlign: "center",
-                  fontFamily: "inherit",
+                  transition: "border-color 0.2s",
+                  boxShadow: "0 2px 4px rgba(0,0,0,0.02)",
                 }}
+                onFocus={(e) => e.target.style.borderColor = "var(--accent)"}
+                onBlur={(e) => e.target.style.borderColor = "var(--border)"}
               />
               <button onClick={startGame} disabled={!nameInput.trim() || !selectedSet} style={{
-                background: (nameInput.trim() && selectedSet) ? "linear-gradient(90deg, #7c3aed, #2563eb)" : "rgba(255,255,255,0.08)",
-                color: (nameInput.trim() && selectedSet) ? "#fff" : "rgba(255,255,255,0.3)",
+                background: (nameInput.trim() && selectedSet) ? "var(--accent)" : "var(--border)",
+                color: "#fff",
                 border: "none",
-                borderRadius: "10px",
-                padding: "14px 36px",
+                borderRadius: "12px",
+                padding: "16px 48px",
                 fontSize: "16px",
                 cursor: (nameInput.trim() && selectedSet) ? "pointer" : "default",
-                fontWeight: "600",
+                fontWeight: "700",
                 letterSpacing: "0.5px",
-                transition: "all 0.2s",
-                fontFamily: "inherit",
+                transition: "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)",
+                boxShadow: (nameInput.trim() && selectedSet) ? "0 4px 14px var(--accent-bg)" : "none",
               }}>
                 {!selectedSet ? "Zuerst ein Thema wählen" : "Experiment starten →"}
               </button>
@@ -577,56 +590,65 @@ export default function DunningKrugerGame() {
         {/* QUIZ */}
         {phase === "quiz" && q && (
           <div>
-            <div style={{ height: "3px", background: "rgba(255,255,255,0.08)", borderRadius: "2px", marginBottom: "36px" }}>
+            <div style={{ height: "6px", background: "var(--border)", borderRadius: "10px", marginBottom: "40px", overflow: "hidden" }}>
               <div style={{
                 height: "100%",
                 width: `${((currentQ + (answered ? 1 : 0)) / questions.length) * 100}%`,
-                background: "linear-gradient(90deg, #7c3aed, #2563eb)",
-                borderRadius: "2px",
-                transition: "width 0.4s ease",
+                background: "var(--accent)",
+                borderRadius: "10px",
+                transition: "width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)",
               }} />
             </div>
 
             <div style={{
-              background: "rgba(255,255,255,0.03)",
-              border: "1px solid rgba(255,255,255,0.08)",
-              borderRadius: "16px",
-              padding: "28px",
-              marginBottom: "24px",
+              background: "var(--bg)",
+              border: "1px solid var(--border)",
+              borderRadius: "24px",
+              padding: "40px",
+              marginBottom: "32px",
+              boxShadow: "0 4px 20px rgba(0,0,0,0.03)",
             }}>
-              <div style={{ display: "flex", gap: "8px", marginBottom: "16px", alignItems: "center" }}>
+              <div style={{ display: "flex", gap: "8px", marginBottom: "20px", alignItems: "center" }}>
                 <span style={{
-                  fontSize: "11px", fontFamily: "monospace", letterSpacing: "1.5px",
+                  fontSize: "12px", fontWeight: "700", letterSpacing: "1.5px",
                   textTransform: "uppercase",
-                  color: q.difficulty === "leicht" ? "#2ecc71" : q.difficulty === "mittel" ? "#f1c40f" : "#e74c3c",
-                  background: "rgba(255,255,255,0.05)", padding: "3px 10px", borderRadius: "6px",
+                  color: q.difficulty === "leicht" ? "#10b981" : q.difficulty === "mittel" ? "#f59e0b" : "#ef4444",
+                  background: q.difficulty === "leicht" ? "#10b98122" : q.difficulty === "mittel" ? "#f59e0b22" : "#ef444422", 
+                  padding: "4px 12px", borderRadius: "20px",
                 }}>
                   {q.difficulty}
                 </span>
               </div>
-              <p style={{ fontSize: "clamp(15px, 2.5vw, 18px)", lineHeight: 1.6, fontWeight: "500", margin: 0 }}>
+              <p style={{ fontSize: "clamp(18px, 3vw, 22px)", lineHeight: 1.5, fontWeight: "700", color: "var(--text-h)", margin: 0 }}>
                 {q.question}
               </p>
             </div>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: "10px", marginBottom: "28px" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px", marginBottom: "32px" }}>
               {q.options.map((opt: string, idx: number) => {
-                let bg = "rgba(255,255,255,0.04)";
-                let border = "1px solid rgba(255,255,255,0.08)";
-                let color = "#e8e8f0";
+                let bg = "var(--bg)";
+                let border = "1px solid var(--border)";
+                let color = "var(--text)";
+                let fontWeight = "500";
+                
                 if (answered) {
-                  if (idx === q.correct) { bg = "rgba(46,204,113,0.15)"; border = "1px solid #2ecc71"; color = "#2ecc71"; }
-                  else if (idx === selectedAnswer && idx !== q.correct) { bg = "rgba(231,76,60,0.15)"; border = "1px solid #e74c3c"; color = "#e74c3c"; }
+                  if (idx === q.correct) { 
+                    bg = "#10b98122"; border = "2px solid #10b981"; color = "#059669"; fontWeight = "700";
+                  }
+                  else if (idx === selectedAnswer && idx !== q.correct) { 
+                    bg = "#ef444422"; border = "2px solid #ef4444"; color = "#dc2626"; fontWeight = "700";
+                  }
                 } else if (idx === selectedAnswer) {
-                  bg = "rgba(124,58,237,0.2)"; border = "1px solid #7c3aed";
+                  bg = "var(--accent-bg)"; border = "2px solid var(--accent)"; color = "var(--accent)"; fontWeight = "700";
                 }
+                
                 return (
                   <button key={idx} onClick={() => handleAnswer(idx)} style={{
-                    background: bg, border, borderRadius: "10px", padding: "14px 18px",
-                    color, fontSize: "14px", textAlign: "left", cursor: answered ? "default" : "pointer",
-                    transition: "all 0.2s", lineHeight: 1.5, fontFamily: "inherit",
+                    background: bg, border, borderRadius: "16px", padding: "18px 24px",
+                    color, fontSize: "16px", textAlign: "left", cursor: answered ? "default" : "pointer",
+                    transition: "all 0.2s", lineHeight: 1.4, fontWeight, boxShadow: "0 1px 2px rgba(0,0,0,0.02)",
                   }}>
-                    <span style={{ opacity: 0.5, marginRight: "10px", fontFamily: "monospace", fontSize: "12px" }}>
+                    <span style={{ opacity: 0.4, marginRight: "12px", fontWeight: "800", fontSize: "13px" }}>
                       {String.fromCharCode(65 + idx)}
                     </span>
                     {opt}
@@ -637,20 +659,22 @@ export default function DunningKrugerGame() {
 
             {!answered && (
               <div style={{
-                background: "rgba(255,255,255,0.03)",
-                border: "1px solid rgba(255,255,255,0.08)",
-                borderRadius: "12px", padding: "20px 24px", marginBottom: "20px",
+                background: "var(--code-bg)",
+                border: "1px solid var(--border)",
+                borderRadius: "20px", padding: "28px 32px", marginBottom: "32px",
               }}>
-                <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.5)", marginBottom: "14px", fontFamily: "monospace", letterSpacing: "1px", textTransform: "uppercase" }}>
+                <p style={{ fontSize: "13px", color: "var(--text)", opacity: 0.6, marginBottom: "20px", fontWeight: "700", letterSpacing: "1.5px", textTransform: "uppercase" }}>
                   Wie sicher bist du dir?
                 </p>
-                <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
                   {CONFIDENCE_LABELS.map(c => (
                     <button key={c.value} onClick={() => setSelectedConfidence(c.value)} style={{
-                      background: selectedConfidence === c.value ? "rgba(124,58,237,0.3)" : "rgba(255,255,255,0.05)",
-                      border: selectedConfidence === c.value ? "1px solid #7c3aed" : "1px solid rgba(255,255,255,0.1)",
-                      borderRadius: "8px", padding: "8px 14px", color: "#e8e8f0",
-                      fontSize: "13px", cursor: "pointer", transition: "all 0.15s", fontFamily: "inherit",
+                      background: selectedConfidence === c.value ? "var(--accent)" : "var(--bg)",
+                      border: selectedConfidence === c.value ? "1px solid var(--accent)" : "1px solid var(--border)",
+                      borderRadius: "12px", padding: "10px 18px", 
+                      color: selectedConfidence === c.value ? "#fff" : "var(--text)",
+                      fontSize: "14px", cursor: "pointer", transition: "all 0.2s", fontWeight: "600",
+                      boxShadow: "0 1px 2px rgba(0,0,0,0.02)",
                     }}>
                       {c.emoji} {c.label}
                     </button>
@@ -661,33 +685,37 @@ export default function DunningKrugerGame() {
 
             {!answered ? (
               <button onClick={confirmAnswer} disabled={selectedAnswer === null || selectedConfidence === null} style={{
-                background: (selectedAnswer !== null && selectedConfidence !== null) ? "linear-gradient(90deg, #7c3aed, #2563eb)" : "rgba(255,255,255,0.06)",
-                color: (selectedAnswer !== null && selectedConfidence !== null) ? "#fff" : "rgba(255,255,255,0.25)",
-                border: "none", borderRadius: "10px", padding: "13px 28px", fontSize: "15px",
+                background: (selectedAnswer !== null && selectedConfidence !== null) ? "var(--accent)" : "var(--border)",
+                color: "#fff", border: "none", borderRadius: "12px", padding: "16px 32px", fontSize: "16px",
                 cursor: (selectedAnswer !== null && selectedConfidence !== null) ? "pointer" : "default",
-                fontWeight: "600", transition: "all 0.2s", fontFamily: "inherit",
+                fontWeight: "700", transition: "all 0.2s", width: "100%", maxWidth: "260px",
+                boxShadow: (selectedAnswer !== null && selectedConfidence !== null) ? "0 4px 14px var(--accent-bg)" : "none",
               }}>
                 Antwort bestätigen
               </button>
             ) : (
-              <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
                 <div style={{
-                  flex: 1,
-                  background: answers[answers.length - 1]?.correct ? "rgba(46,204,113,0.1)" : "rgba(231,76,60,0.1)",
-                  border: `1px solid ${answers[answers.length - 1]?.correct ? "#2ecc71" : "#e74c3c"}`,
-                  borderRadius: "10px", padding: "12px 16px", fontSize: "14px",
-                  color: answers[answers.length - 1]?.correct ? "#2ecc71" : "#e74c3c",
+                  background: answers[answers.length - 1]?.correct ? "#10b98115" : "#ef444415",
+                  border: `1px solid ${answers[answers.length - 1]?.correct ? "#10b981" : "#ef4444"}`,
+                  borderRadius: "16px", padding: "20px", fontSize: "16px", fontWeight: "600",
+                  color: answers[answers.length - 1]?.correct ? "#059669" : "#dc2626",
+                  display: "flex", justifyContent: "space-between", alignItems: "center"
                 }}>
-                  {answers[answers.length - 1]?.correct ? "✓ Richtig!" : "✗ Leider falsch."}
-                  {" "}Dein Selbstvertrauen: {CONFIDENCE_LABELS.find(c => c.value === answers[answers.length - 1]?.confidence)?.label}
+                  <span>
+                    {answers[answers.length - 1]?.correct ? "✓ Super, das war richtig!" : "✗ Schade, das war leider falsch."}
+                  </span>
+                  <span style={{ fontSize: "14px", opacity: 0.8 }}>
+                    Selbstvertrauen: {CONFIDENCE_LABELS.find(c => c.value === answers[answers.length - 1]?.confidence)?.label}
+                  </span>
                 </div>
                 <button onClick={nextQuestion} style={{
-                  background: "linear-gradient(90deg, #7c3aed, #2563eb)",
-                  color: "#fff", border: "none", borderRadius: "10px",
-                  padding: "12px 22px", fontSize: "14px", cursor: "pointer",
-                  fontWeight: "600", fontFamily: "inherit", whiteSpace: "nowrap",
+                  background: "var(--accent)", color: "#fff", border: "none", borderRadius: "12px",
+                  padding: "16px 32px", fontSize: "16px", cursor: "pointer",
+                  fontWeight: "700", width: "100%", maxWidth: "260px", alignSelf: "flex-end",
+                  boxShadow: "0 4px 14px var(--accent-bg)",
                 }}>
-                  {currentQ < questions.length - 1 ? "Weiter →" : "Auswertung →"}
+                  {currentQ < questions.length - 1 ? "Nächste Frage →" : "Endergebnis anzeigen →"}
                 </button>
               </div>
             )}
@@ -697,100 +725,112 @@ export default function DunningKrugerGame() {
         {/* RESULT */}
         {phase === "result" && (
           <div>
-            <div style={{ textAlign: "center", marginBottom: "36px" }}>
-              <div style={{ fontSize: "52px", marginBottom: "16px" }}>
+            <div style={{ textAlign: "center", marginBottom: "48px" }}>
+              <div style={{ fontSize: "80px", marginBottom: "24px" }}>
                 {overconfidenceScore > 35 ? "🏔️" : overconfidenceScore > 10 ? "😬" : overconfidenceScore > -10 ? "🎯" : "🧙‍♂️"}
               </div>
-              <h2 style={{ fontSize: "clamp(22px, 4vw, 32px)", fontWeight: "700", marginBottom: "8px" }}>
+              <h2 style={{ fontSize: "clamp(28px, 5vw, 40px)", fontWeight: "800", marginBottom: "12px", color: "var(--text-h)" }}>
                 {playerName}, dein Ergebnis
               </h2>
               {activeSet && (
-                <div style={{ fontSize: "13px", color: "rgba(255,255,255,0.3)", marginBottom: "12px", fontFamily: "monospace" }}>
+                <div style={{ fontSize: "14px", color: "var(--accent)", fontWeight: "700", letterSpacing: "1px", textTransform: "uppercase", marginBottom: "20px" }}>
                   {activeSet.emoji} {activeSet.label}
                 </div>
               )}
               <div style={{
                 display: "inline-block",
-                background: `${currentPhase.color}22`,
-                border: `1px solid ${currentPhase.color}`,
-                borderRadius: "8px", padding: "6px 16px", fontSize: "14px",
-                color: currentPhase.color, marginBottom: "8px", fontWeight: "600",
+                background: `${currentPhase.color}15`,
+                border: `2px solid ${currentPhase.color}`,
+                borderRadius: "12px", padding: "8px 24px", fontSize: "16px",
+                color: currentPhase.color, marginBottom: "20px", fontWeight: "800",
               }}>
                 {currentPhase.name}
               </div>
-              <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "14px", maxWidth: "400px", margin: "8px auto 0", lineHeight: 1.6 }}>
+              <p style={{ color: "var(--text)", fontSize: "18px", maxWidth: "540px", margin: "0 auto", lineHeight: 1.6, opacity: 0.8 }}>
                 {currentPhase.desc}
               </p>
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "12px", marginBottom: "28px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "16px", marginBottom: "40px" }}>
               {[
-                { label: "Richtige Antworten", value: `${accuracy}%`, sub: `${answers.filter(a => a.correct).length}/${answers.length} korrekt` },
-                { label: "Ø Selbstvertrauen", value: `${confidencePct}%`, sub: `${avgConfidence.toFixed(1)} von 5` },
-                { label: "Überschätzung", value: `${overconfidenceScore > 0 ? "+" : ""}${overconfidenceScore}%`, sub: overconfidenceScore > 0 ? "zu selbstsicher" : overconfidenceScore < -5 ? "zu bescheiden" : "gut kalibriert" },
+                { label: "Richtige Antworten", value: `${accuracy}%`, sub: `${answers.filter(a => a.correct).length}/${answers.length} korrekt`, color: "#10b981" },
+                { label: "Ø Selbstvertrauen", value: `${confidencePct}%`, sub: `${avgConfidence.toFixed(1)} von 5`, color: "var(--accent)" },
+                { label: "Kalibrierung", value: `${overconfidenceScore > 0 ? "+" : ""}${overconfidenceScore}%`, sub: overconfidenceScore > 0 ? "zu selbstsicher" : overconfidenceScore < -5 ? "zu bescheiden" : "perfekt!", color: "#f59e0b" },
               ].map(s => (
                 <div key={s.label} style={{
-                  background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)",
-                  borderRadius: "12px", padding: "18px 14px", textAlign: "center",
+                  background: "var(--bg)", border: "1px solid var(--border)",
+                  borderRadius: "20px", padding: "24px", textAlign: "center",
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.02)",
                 }}>
-                  <div style={{ fontSize: "clamp(20px, 4vw, 28px)", fontWeight: "700", marginBottom: "4px" }}>{s.value}</div>
-                  <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.4)", letterSpacing: "0.5px", marginBottom: "4px" }}>{s.label}</div>
-                  <div style={{ fontSize: "11px", color: "rgba(255,255,255,0.3)" }}>{s.sub}</div>
+                  <div style={{ fontSize: "32px", fontWeight: "800", marginBottom: "8px", color: s.color }}>{s.value}</div>
+                  <div style={{ fontSize: "13px", color: "var(--text-h)", fontWeight: "700", letterSpacing: "0.5px", marginBottom: "4px" }}>{s.label}</div>
+                  <div style={{ fontSize: "13px", color: "var(--text)", opacity: 0.6 }}>{s.sub}</div>
                 </div>
               ))}
             </div>
 
             <div style={{
-              background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)",
-              borderRadius: "16px", padding: "24px", marginBottom: "24px",
+              background: "var(--code-bg)", border: "1px solid var(--border)",
+              borderRadius: "24px", padding: "32px", marginBottom: "32px",
             }}>
-              <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.35)", letterSpacing: "2px", textTransform: "uppercase", fontFamily: "monospace", marginBottom: "16px" }}>
-                Wo du auf der Kurve stehst
+              <p style={{ fontSize: "13px", color: "var(--text)", opacity: 0.6, letterSpacing: "1.5px", textTransform: "uppercase", fontWeight: "700", marginBottom: "24px" }}>
+                Deine Position auf der Kurve
               </p>
-              <div style={{ display: "flex", gap: "6px" }}>
-                {DK_PHASES.map(p => (
-                  <div key={p.name} style={{ flex: 1, textAlign: "center" }}>
-                    <div style={{
-                      height: "8px", borderRadius: "4px",
-                      background: p.name === currentPhase.name ? p.color : `${p.color}44`,
-                      marginBottom: "8px",
-                      transform: p.name === currentPhase.name ? "scaleY(2)" : "scaleY(1)",
-                      transformOrigin: "center", transition: "all 0.3s",
-                    }} />
-                    <div style={{ fontSize: "10px", color: p.name === currentPhase.name ? p.color : "rgba(255,255,255,0.25)", lineHeight: 1.3 }}>
-                      {p.name.split(" ").slice(0, 2).join(" ")}
+              <div style={{ display: "flex", gap: "8px", alignItems: "flex-end", height: "60px", marginBottom: "16px" }}>
+                {DK_PHASES.map(p => {
+                  const isActive = p.name === currentPhase.name;
+                  return (
+                    <div key={p.name} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
+                       <div style={{
+                        width: "100%",
+                        height: isActive ? "24px" : "8px",
+                        borderRadius: "10px",
+                        background: isActive ? p.color : "var(--border)",
+                        transition: "all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
+                        boxShadow: isActive ? `0 4px 12px ${p.color}44` : "none",
+                      }} />
+                      <div style={{ fontSize: "11px", fontWeight: isActive ? "800" : "600", color: isActive ? p.color : "var(--text)", opacity: isActive ? 1 : 0.4, textAlign: "center", lineHeight: 1.2 }}>
+                        {p.name}
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
 
             <div style={{
-              background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)",
-              borderRadius: "16px", padding: "20px 24px", marginBottom: "24px",
+              background: "var(--bg)", border: "1px solid var(--border)",
+              borderRadius: "24px", padding: "32px", marginBottom: "32px",
+              boxShadow: "0 4px 20px rgba(0,0,0,0.02)",
             }}>
-              <p style={{ fontSize: "12px", color: "rgba(255,255,255,0.35)", letterSpacing: "2px", textTransform: "uppercase", fontFamily: "monospace", marginBottom: "14px" }}>
-                Frage für Frage
+              <p style={{ fontSize: "13px", color: "var(--text)", opacity: 0.6, letterSpacing: "1.5px", textTransform: "uppercase", fontWeight: "700", marginBottom: "20px" }}>
+                Detaillierte Analyse
               </p>
-              <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
                 {answers.map((a, i) => {
                   const conf = CONFIDENCE_LABELS.find(c => c.value === a.confidence);
                   return (
                     <div key={i} style={{
-                      display: "flex", alignItems: "center", gap: "12px",
-                      padding: "10px 14px", borderRadius: "8px",
-                      background: a.correct ? "rgba(46,204,113,0.07)" : "rgba(231,76,60,0.07)",
+                      display: "flex", alignItems: "center", gap: "16px",
+                      padding: "14px 20px", borderRadius: "12px",
+                      background: a.correct ? "#10b98108" : "#ef444408",
+                      border: `1px solid ${a.correct ? "#10b98122" : "#ef444422"}`,
                     }}>
-                      <span style={{ fontSize: "13px", color: a.correct ? "#2ecc71" : "#e74c3c", fontFamily: "monospace", width: "20px" }}>
+                      <div style={{ 
+                        width: "28px", height: "28px", borderRadius: "50%", 
+                        background: a.correct ? "#10b981" : "#ef4444",
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        color: "#fff", fontSize: "14px", fontWeight: "800"
+                      }}>
                         {a.correct ? "✓" : "✗"}
-                      </span>
-                      <span style={{ flex: 1, fontSize: "13px", color: "rgba(255,255,255,0.6)" }}>Frage {i + 1}</span>
-                      <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.4)" }}>{conf?.emoji} {conf?.label}</span>
+                      </div>
+                      <span style={{ flex: 1, fontSize: "15px", fontWeight: "600", color: "var(--text-h)" }}>Frage {i + 1}</span>
+                      <span style={{ fontSize: "14px", fontWeight: "500", color: "var(--text)", opacity: 0.7 }}>{conf?.emoji} {conf?.label}</span>
                       {a.correct && a.confidence <= 2 && (
-                        <span style={{ fontSize: "11px", color: "#f1c40f", background: "rgba(241,196,15,0.1)", padding: "2px 8px", borderRadius: "4px" }}>zu bescheiden</span>
+                        <span style={{ fontSize: "11px", fontWeight: "800", color: "#f59e0b", background: "#f59e0b15", padding: "4px 10px", borderRadius: "20px", textTransform: "uppercase" }}>zu bescheiden</span>
                       )}
                       {!a.correct && a.confidence >= 4 && (
-                        <span style={{ fontSize: "11px", color: "#e74c3c", background: "rgba(231,76,60,0.1)", padding: "2px 8px", borderRadius: "4px" }}>überschätzt</span>
+                        <span style={{ fontSize: "11px", fontWeight: "800", color: "#ef4444", background: "#ef444415", padding: "4px 10px", borderRadius: "20px", textTransform: "uppercase" }}>überschätzt</span>
                       )}
                     </div>
                   );
@@ -799,31 +839,32 @@ export default function DunningKrugerGame() {
             </div>
 
             <div style={{
-              background: "linear-gradient(135deg, rgba(124,58,237,0.15), rgba(37,99,235,0.1))",
-              border: "1px solid rgba(124,58,237,0.3)",
-              borderRadius: "12px", padding: "20px 22px", marginBottom: "24px",
+              background: "var(--accent-bg)",
+              border: "1px solid var(--accent-border)",
+              borderRadius: "20px", padding: "28px", marginBottom: "40px",
             }}>
-              <p style={{ fontSize: "13px", color: "rgba(255,255,255,0.4)", marginBottom: "8px", fontFamily: "monospace", letterSpacing: "1px" }}>
-                💡 ERKENNTNIS
+              <p style={{ fontSize: "13px", color: "var(--accent)", fontWeight: "800", marginBottom: "12px", letterSpacing: "2px", textTransform: "uppercase" }}>
+                💡 Analyse
               </p>
-              <p style={{ fontSize: "14px", lineHeight: 1.7, color: "rgba(255,255,255,0.7)", margin: 0 }}>
+              <p style={{ fontSize: "16px", lineHeight: 1.7, color: "var(--text-h)", margin: 0, fontWeight: "500" }}>
                 {overconfidenceScore > 35
                   ? "Du hast dich deutlich überschätzt — das ist der klassische 'Mount Stupid'. Das Gute: Wer das erkennt, ist auf dem Weg zum echten Lernen."
                   : overconfidenceScore > 10
-                    ? "Kleines Missverhältnis zwischen Selbstvertrauen und tatsächlichem Wissen — du bist auf dem Weg in das Valley of Despair. Das ist gut: Hier beginnt echtes Lernen."
+                    ? "Ein gewisses Missverhältnis zwischen Selbstvertrauen und tatsächlichem Wissen — du bist auf dem Weg in das 'Valley of Despair'. Ein wichtiger Schritt für echtes Wachstum!"
                     : overconfidenceScore > -10
-                      ? "Deine Selbsteinschätzung trifft dein Wissen gut — das ist Kalibrierung auf dem Plateau der Erleuchtung."
-                      : "Du hast dich eher unterschätzt — Imposter Syndrome? Du weißt mehr als du denkst."}
+                      ? "Deine Selbsteinschätzung trifft dein Wissen sehr gut — du hast eine gesunde Kalibrierung und stehst auf dem 'Plateau der Erleuchtung'."
+                      : "Du hast dein Licht unter den Scheffel gestellt — eventuell ein Anflug von 'Imposter Syndrome'? Du weißt deutlich mehr, als du dir zutraust."}
               </p>
             </div>
 
-            <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+            <div style={{ display: "flex", gap: "12px", flexWrap: "wrap", justifyContent: "center" }}>
               <button onClick={resetGame} style={{
-                background: "rgba(255,255,255,0.07)", color: "rgba(255,255,255,0.6)",
-                border: "1px solid rgba(255,255,255,0.12)", borderRadius: "10px",
-                padding: "12px 24px", fontSize: "14px", cursor: "pointer", fontFamily: "inherit",
+                background: "var(--bg)", color: "var(--text)",
+                border: "2px solid var(--border)", borderRadius: "12px",
+                padding: "16px 32px", fontSize: "15px", cursor: "pointer", fontWeight: "700",
+                transition: "all 0.2s",
               }}>
-                ↺ Nochmal / anderes Thema
+                ↺ Nochmal von vorn
               </button>
               {activeSet && Object.values(QUESTION_SETS).filter(s => s.id !== activeSet.id).map(other => (
                 <button key={other.id} onClick={() => {
@@ -832,12 +873,13 @@ export default function DunningKrugerGame() {
                   setSelectedConfidence(null); setAnswered(false);
                   setPhase("quiz");
                 }} style={{
-                  background: "linear-gradient(90deg, rgba(124,58,237,0.2), rgba(37,99,235,0.2))",
-                  color: "rgba(255,255,255,0.7)", border: "1px solid rgba(124,58,237,0.3)",
-                  borderRadius: "10px", padding: "12px 24px", fontSize: "14px",
-                  cursor: "pointer", fontFamily: "inherit",
+                  background: "var(--accent)",
+                  color: "#fff", border: "none",
+                  borderRadius: "12px", padding: "16px 32px", fontSize: "15px",
+                  cursor: "pointer", fontWeight: "700", transition: "all 0.2s",
+                  boxShadow: "0 4px 14px var(--accent-bg)",
                 }}>
-                  {other.emoji} {other.label} ausprobieren
+                  {other.emoji} {other.label} testen
                 </button>
               ))}
             </div>
@@ -845,7 +887,7 @@ export default function DunningKrugerGame() {
         )}
       </div>
 
-      <div style={{ padding: "24px", fontSize: "11px", color: "rgba(255,255,255,0.15)", textAlign: "center", fontFamily: "monospace" }}>
+      <div style={{ padding: "40px", fontSize: "12px", color: "var(--text)", opacity: 0.4, textAlign: "center", fontWeight: "500" }}>
         Basierend auf Kruger & Dunning, 1999 · Journal of Personality and Social Psychology
       </div>
     </div>
