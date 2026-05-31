@@ -5,4 +5,5 @@ dist
 README.md
 Dockerfile
 .dockerignore
-pnpm-lock.yaml
+# pnpm-lock.yaml removed from ignore so it can be copied during build
+
