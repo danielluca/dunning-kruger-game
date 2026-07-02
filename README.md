@@ -1,73 +1,100 @@
-# React + TypeScript + Vite
+# Dunning-Kruger Game
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An interactive quiz game that compares what players know vs. how sure they feel.
 
-Currently, two official plugins are available:
+The app uses themed question sets and confidence self-ratings to place each player on a simplified Dunning-Kruger curve.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- Three themed quiz modes:
+  - Product development and tech
+  - DATEV ecosystem
+  - Marketing and growth
+- Confidence tracking per question (1 to 5)
+- Result breakdown with:
+  - Accuracy percentage
+  - Average confidence
+  - Overconfidence score
+  - Dunning-Kruger phase classification
+- Single-page app routing ready for static hosting (fallback to `index.html` via Nginx)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech Stack
 
-## Expanding the ESLint configuration
+- React 19
+- TypeScript
+- Vite 8
+- ESLint 10
+- Docker (multi-stage build) + Nginx
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Requirements
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- Node.js 22+
+- pnpm 10+
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Local Development
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Install dependencies:
+
+```bash
+pnpm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Start the dev server:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+pnpm run dev
 ```
+
+Create a production build:
+
+```bash
+pnpm run build
+```
+
+Preview the production build locally:
+
+```bash
+pnpm run preview
+```
+
+Run linting:
+
+```bash
+pnpm run lint
+```
+
+## Docker
+
+Build the image:
+
+```bash
+docker build -t dunning-kruger-game .
+```
+
+Run the container:
+
+```bash
+docker run --rm -p 8080:80 dunning-kruger-game
+```
+
+Then open <http://localhost:8080>.
+
+## Project Structure
+
+```text
+src/
+  components/
+    dunning-kruger-game.tsx   # Main game flow, questions, scoring, and results
+  App.tsx                     # App shell
+  main.tsx                    # App bootstrap
+```
+
+## Scoring Model (Current)
+
+- Accuracy = correct answers / total answers
+- Average confidence = mean selected confidence (1 to 5)
+- Confidence percentage = `(avgConfidence / 5) * 100`
+- Overconfidence score = `confidencePct - accuracy`
+- Phase is mapped from confidence-vs-accuracy gap into four ranges
+
+This is an educational game model, not a clinical or psychometric assessment.
