@@ -1,4 +1,11 @@
 import { useState } from "react";
+import { DK_PHASES, getPhase, getPhaseAnalysisText } from "./dk-phase";
+
+function scrollToTop() {
+  if (typeof window !== "undefined") {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+}
 
 type Question = {
   id: number;
@@ -345,21 +352,6 @@ const CONFIDENCE_LABELS = [
   { value: 5, label: "Absolut sicher", emoji: "💪" },
 ];
 
-const DK_PHASES = [
-  { name: "Mount of Stupidity", range: [0, 30], color: "#e74c3c", desc: "Wenig Wissen, hohes Selbstvertrauen — die gefährlichste Zone." },
-  { name: "Valley of Despair", range: [30, 55], color: "#e67e22", desc: "Erkenntnis wächst, Selbstvertrauen sinkt — das echte Lernen beginnt." },
-  { name: "Slope of Enlightenment", range: [55, 80], color: "#f1c40f", desc: "Wissen und Selbsteinschätzung nähern sich an." },
-  { name: "Plateau of Sustainability", range: [80, 100], color: "#2ecc71", desc: "Wissen und Selbstvertrauen sind im Einklang — echter Experte." },
-];
-
-function getPhase(accuracy: number, avgConfidence: number) {
-  const overconfidence = (avgConfidence / 5) * 100 - accuracy;
-  if (overconfidence > 35) return DK_PHASES[0];
-  if (overconfidence > 10) return DK_PHASES[1];
-  if (overconfidence > -10) return DK_PHASES[2];
-  return DK_PHASES[3];
-}
-
 export default function DunningKrugerGame() {
   const [phase, setPhase] = useState("intro");
   const [selectedSet, setSelectedSet] = useState<string | null>(null);
@@ -387,10 +379,11 @@ export default function DunningKrugerGame() {
   }
 
   function confirmAnswer() {
-    if (selectedAnswer === null || selectedConfidence === null || !q) return;
+    if (answered || selectedAnswer === null || selectedConfidence === null || !q) return;
     const correct = selectedAnswer === q.correct;
-    setAnswers([...answers, { correct, confidence: selectedConfidence, questionId: q.id }]);
+    setAnswers((prev) => [...prev, { correct, confidence: selectedConfidence, questionId: q.id }]);
     setAnswered(true);
+    scrollToTop();
   }
 
   function nextQuestion() {
@@ -399,8 +392,10 @@ export default function DunningKrugerGame() {
       setSelectedAnswer(null);
       setSelectedConfidence(null);
       setAnswered(false);
+      scrollToTop();
     } else {
       setPhase("result");
+      scrollToTop();
     }
   }
 
@@ -413,6 +408,7 @@ export default function DunningKrugerGame() {
     setSelectedConfidence(null);
     setAnswered(false);
     setNameInput("");
+    scrollToTop();
   }
 
   const accuracy = answers.length > 0
@@ -727,7 +723,13 @@ export default function DunningKrugerGame() {
           <div>
             <div style={{ textAlign: "center", marginBottom: "48px" }}>
               <div style={{ fontSize: "80px", marginBottom: "24px" }}>
-                {overconfidenceScore > 35 ? "🏔️" : overconfidenceScore > 10 ? "😬" : overconfidenceScore > -10 ? "🎯" : "🧙‍♂️"}
+                {currentPhase.name === "Mount of Stupidity"
+                  ? "🏔️"
+                  : currentPhase.name === "Valley of Despair"
+                    ? "😬"
+                    : currentPhase.name === "Slope of Enlightenment"
+                      ? "🎯"
+                      : "🧙‍♂️"}
               </div>
               <h2 style={{ fontSize: "clamp(28px, 5vw, 40px)", fontWeight: "800", marginBottom: "12px", color: "var(--text-h)" }}>
                 {playerName}, dein Ergebnis
@@ -847,13 +849,7 @@ export default function DunningKrugerGame() {
                 💡 Analyse
               </p>
               <p style={{ fontSize: "16px", lineHeight: 1.7, color: "var(--text-h)", margin: 0, fontWeight: "500" }}>
-                {overconfidenceScore > 35
-                  ? "Du hast dich deutlich überschätzt — das ist der klassische 'Mount Stupid'. Das Gute: Wer das erkennt, ist auf dem Weg zum echten Lernen."
-                  : overconfidenceScore > 10
-                    ? "Ein gewisses Missverhältnis zwischen Selbstvertrauen und tatsächlichem Wissen — du bist auf dem Weg in das 'Valley of Despair'. Ein wichtiger Schritt für echtes Wachstum!"
-                    : overconfidenceScore > -10
-                      ? "Deine Selbsteinschätzung trifft dein Wissen sehr gut — du hast eine gesunde Kalibrierung und stehst auf dem 'Plateau der Erleuchtung'."
-                      : "Du hast dein Licht unter den Scheffel gestellt — eventuell ein Anflug von 'Imposter Syndrome'? Du weißt deutlich mehr, als du dir zutraust."}
+                {getPhaseAnalysisText(currentPhase.name)}
               </p>
             </div>
 

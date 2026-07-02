@@ -63,6 +63,33 @@ Run linting:
 pnpm run lint
 ```
 
+Run tests:
+
+```bash
+pnpm run test
+```
+
+## Deploy to GitHub Pages
+
+This repository includes a workflow at `.github/workflows/deploy-pages.yml` that deploys the app to GitHub Pages on every push to `main`.
+
+One-time GitHub setup:
+
+1. Open the repository on GitHub.
+2. Go to **Settings** -> **Pages**.
+3. Set **Source** to **GitHub Actions**.
+
+After that, push to `main` and GitHub will publish the site.
+
+Expected URL:
+
+- `https://danielluca.github.io/dunning-kruger-game/`
+
+Notes:
+
+- The Vite base path defaults to `/dunning-kruger-game/` so assets work on Pages.
+- You can override it via `VITE_BASE_PATH` (for example, `/` when using a custom domain).
+
 ## Docker
 
 Build the image:
